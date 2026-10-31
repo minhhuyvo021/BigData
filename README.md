@@ -1,88 +1,67 @@
-# Phan tich Heart Failure bang PySpark
+🫀 Phân tích dữ liệu Heart Failure bằng PySpark
 
-Project nay thuc hien phan 4 cua de bai mon Khai thac du lieu lon tren file
-`heart_failure_clinical_records_dataset.csv` duoc doc tu HDFS.
+Dự án này thực hiện Phần 4 của bài tập lớn môn Khai thác dữ liệu lớn, sử dụng tập dữ liệu heart_failure_clinical_records_dataset.csv được đọc từ hệ thống tệp phân tán HDFS.
 
-## 1. Muc tieu phan 4
+🎯 1. Mục tiêu Phần 4
 
-Chon 3 giai thuat trong so do Data Mining va danh gia ket qua:
+Dự án áp dụng và đánh giá 3 thuật toán tiêu biểu trong quy trình Data Mining:
 
-- `LogisticRegression`: phan loai `DEATH_EVENT`.
-- `KMeans`: phan cum benh nhan theo cac chi so lam sang.
-- `FPGrowth`: khai pha tap pho bien va luat ket hop tu cac bien da roi rac hoa.
+⚬ Logistic Regression: Phân loại biến DEATH_EVENT (dự đoán khả năng tử vong của bệnh nhân).
+⚬ KMeans: Phân cụm bệnh nhân dựa trên các chỉ số lâm sàng để tìm ra các nhóm đặc trưng.
+⚬ FP-Growth: Khai phá tập phổ biến và luật kết hợp từ các biến đã được rời rạc hóa.
 
-## 2. Cai dat
+⚙️ 2. Cài đặt môi trường
 
-```bash
+Thiết lập môi trường ảo Python và cài đặt các thư viện cần thiết:
+
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-```
+pip install -r requirements.txt
 
-May can co Java. Kiem tra bang:
 
-```bash
+⚠️ Lưu ý quan trọng:
+PySpark yêu cầu máy tính phải cài đặt sẵn Java. Kiểm tra phiên bản Java hiện tại trên máy của bạn bằng lệnh:
+
 java -version
-```
 
-## 3. Chay phan tich
 
-```bash
-python src/heart_failure_pyspark.py \
-  --input hdfs://localhost:9000/user/tony/input/dataset/heart_failure_clinical_records_dataset.csv \
-  --output outputs
-```
+🚀 3. Chạy phân tích
 
-Neu dung dung duong dan HDFS mac dinh trong de bai, co the chay ngan gon:
+Chạy script chính để thực hiện quá trình phân tích.
 
-```bash
-python src/heart_failure_pyspark.py --output outputs
-```
+Đảm bảo bạn đã thay thế <YOUR_HDFS_PATH> bằng đường dẫn thực tế chứa dữ liệu trên hệ thống HDFS của bạn:
 
-## 4. Ket qua sinh ra
+python src/heart_failure_pyspark.py --input <YOUR_HDFS_PATH>/heart_failure_clinical_records_dataset.csv --output outputs
 
-Sau khi chay, thu muc `outputs/` se co:
 
-- `classification_metrics/`: cac chi so Accuracy, Precision, Recall, F1, ROC AUC, PR AUC.
-- `classification_predictions/`: mau du doan cua Logistic Regression.
-- `kmeans_k_selection/`: silhouette score cho cac gia tri `k`.
-- `kmeans_cluster_metrics/`: purity va silhouette cua mo hinh KMeans tot nhat.
-- `kmeans_cluster_profile/`: mo ta tung cum, gom so luong, ty le tu vong va gia tri trung binh.
-- `fpgrowth_itemsets/`: top tap pho bien.
-- `fpgrowth_rules/`: top luat ket hop kem lift, all-confidence, Kulczynski va cosine.
-- `comparison_summary.md`: tom tat so sanh 3 phuong phap de dua vao bao cao.
+📂 4. Kết quả sinh ra
 
-## 5. Goi y dua vao bao cao
+Sau khi quá trình chạy hoàn tất, toàn bộ kết quả sẽ được xuất ra thư mục outputs/, bao gồm:
 
-- Voi phan loai: dung `classification_metrics` de nhan xet hieu suat mo hinh.
-- Voi phan cum: dung silhouette cho danh gia khong giam sat, dung purity theo `DEATH_EVENT`
-  cho danh gia co giam sat.
-- Voi tap pho bien/luat ket hop: dung lift va cosine/Kulczynski de nhan xet muc do lien he
-  giua cac dieu kien va ket qua.
+⚬ 📁 classification_metrics/: Các chỉ số đánh giá mô hình phân loại (Accuracy, Precision, Recall, F1, ROC AUC, PR AUC).
+⚬ 📁 classification_predictions/: Tập mẫu dự đoán của thuật toán Logistic Regression.
+⚬ 📁 kmeans_k_selection/: Bảng điểm Silhouette để đánh giá và lựa chọn giá trị k tối ưu.
+⚬ 📁 kmeans_cluster_metrics/: Độ thuần nhất (Purity) và điểm Silhouette của mô hình KMeans tốt nhất.
+⚬ 📁 kmeans_cluster_profile/: Mô tả chi tiết từng cụm (số lượng bệnh nhân, tỷ lệ tử vong, các giá trị trung bình của từng chỉ số).
+⚬ 📁 fpgrowth_itemsets/: Top các tập phổ biến được khai phá.
+⚬ 📁 fpgrowth_rules/: Top các luật kết hợp kèm theo các chỉ số tin cậy (Lift, All-confidence, Kulczynski và Cosine).
+⚬ 📄 comparison_summary.md: File tóm tắt so sánh 3 phương pháp, phục vụ trực tiếp cho việc viết báo cáo.
 
-## 6. Train model va mo form du doan
+💻 5. Huấn luyện mô hình và Ứng dụng dự đoán
 
-Train 1 model Logistic Regression va luu vao thu muc `models/`:
+Để xây dựng một ứng dụng thực tế từ kết quả phân tích, bạn có thể huấn luyện một mô hình Logistic Regression riêng và lưu vào thư mục models/:
 
-```bash
 python src/train_heart_failure_model.py
-```
 
-Neu muon truyen ro duong dan HDFS:
 
-```bash
+Nếu cần truyền rõ đường dẫn HDFS cụ thể, hãy chạy:
+
 python src/train_heart_failure_model.py \
-  --input hdfs://localhost:9000/user/tony/input/dataset/heart_failure_clinical_records_dataset.csv \
+  --input <YOUR_HDFS_PATH>/heart_failure_clinical_records_dataset.csv \
   --model-output models/logistic_regression_pipeline
-```
 
-Mo form Tkinter cho nguoi dung nhap input va xem ket qua du doan:
 
-```bash
+Mở giao diện người dùng (GUI):
+Sau khi có mô hình, bạn có thể mở giao diện Tkinter để người dùng nhập các chỉ số sức khỏe thực tế và xem kết quả dự đoán trực tiếp:
+
 python src/predict_heart_failure_tkinter.py
-```
-
-Ket qua tren form gom:
-
-- Nhan du doan: nguy co thap hoac co nguy co tu vong.
-- Xac suat `DEATH_EVENT = 1`.
