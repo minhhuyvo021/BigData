@@ -1,67 +1,86 @@
-# 🫀 Heart Failure Data Mining with PySpark
+# # 🫀 Heart Failure Prediction with PySpark
 
-A personal **Big Data & Machine Learning project** that applies Apache PySpark to analyze clinical records of heart failure patients using data stored in **HDFS**.
+A personal Machine Learning project that predicts the risk of death among heart failure patients based on clinical data.
 
-The project explores the dataset from three complementary perspectives:
+The project uses **PySpark and Spark MLlib** to preprocess clinical data and train a **Logistic Regression** model. The trained model is then integrated into a **Tkinter desktop application**, allowing users to enter patient information and receive a prediction through a simple graphical interface.
 
-- **Classification** — predict the probability of a death event using Logistic Regression.
-- **Clustering** — identify patient groups with similar clinical characteristics using KMeans.
-- **Association Rule Mining** — discover frequent patterns and relationships using FP-Growth.
-
-The project also includes a trained prediction pipeline and a lightweight Tkinter application for interactive inference.
+The project also includes additional **KMeans clustering** and **FP-Growth association rule mining** analysis to explore patterns within the dataset.
 
 ---
 
 ## ✨ Highlights
 
-- Distributed data processing with **Apache Spark / PySpark**
-- Data ingestion from **HDFS**
-- Machine Learning with **Spark MLlib**
-- Binary classification with **Logistic Regression**
-- Unsupervised learning with **KMeans**
-- Frequent pattern mining with **FP-Growth**
-- Model evaluation using multiple classification and clustering metrics
-- Reusable ML pipeline for inference
-- Simple desktop prediction interface using **Tkinter**
-
+- Heart failure risk prediction using Logistic Regression
+- Interactive desktop application built with Tkinter
+- Machine Learning pipeline with PySpark / Spark MLlib
+- Data processing with HDFS
+- Model training and evaluation
+- KMeans clustering for patient segmentation
+- FP-Growth for association rule mining
 ---
 
-## 🏗️ Architecture
+## ## 🏗️ Architecture
+
+The project is organized around a machine learning prediction pipeline, with the Tkinter application serving as the user-facing layer.
 
 ```text
-                         ┌─────────────────────┐
-                         │        HDFS         │
-                         │  Heart Failure CSV  │
-                         └──────────┬──────────┘
+                         ┌──────────────────────┐
+                         │         HDFS         │
+                         │  Heart Failure CSV   │
+                         └──────────┬───────────┘
                                     │
                                     ▼
-                         ┌─────────────────────┐
-                         │  PySpark Pipeline   │
-                         │                     │
-                         │ • Data Preparation  │
-                         │ • Feature Processing│
-                         └──────────┬──────────┘
+                         ┌──────────────────────┐
+                         │      PySpark         │
+                         │   Data Processing    │
+                         │  • Cleaning          │
+                         │  • Feature Processing│
+                         └──────────┬───────────┘
                                     │
-                 ┌──────────────────┼──────────────────┐
-                 │                  │                  │
-                 ▼                  ▼                  ▼
-        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
-        │    Logistic    │ │     KMeans     │ │   FP-Growth    │
-        │   Regression   │ │   Clustering   │ │ Association    │
-        │                │ │                │ │     Rules      │
-        └───────┬────────┘ └───────┬────────┘ └───────┬────────┘
-                │                  │                  │
-                ▼                  ▼                  ▼
-        Classification      Cluster Analysis    Frequent Patterns
-             Metrics             & Profiles       & Rules
-                │                  │                  │
-                └──────────────────┼──────────────────┘
-                                   ▼
-                         ┌─────────────────────┐
-                         │  Analysis Results   │
-                         │  & Model Artifacts  │
-                         └─────────────────────┘
+                                    ▼
+                         ┌──────────────────────┐
+                         │  Logistic Regression │
+                         │    Model Training    │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │    Trained Model     │
+                         │  Spark ML Pipeline   │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │     Tkinter GUI      │
+                         │                      │
+                         │  Patient Information │
+                         └──────────┬───────────┘
+                                    │
+                                    ▼
+                         ┌──────────────────────┐
+                         │   Prediction Result  │
+                         │   Death Event Risk   │
+                         └──────────────────────┘
 ```
+
+### Additional Data Mining Analysis
+
+In addition to the prediction pipeline, the project includes two exploratory data mining techniques:
+
+```text
+                  Clinical Dataset
+                         │
+              ┌──────────┴──────────┐
+              ▼                     ▼
+          KMeans                FP-Growth
+       Clustering          Association Rules
+              │                     │
+              ▼                     ▼
+      Patient Profiles       Frequent Patterns
+```
+
+- **KMeans** is used to identify groups of patients with similar clinical characteristics.
+- **FP-Growth** is used to discover frequent patterns and association rules among discretized clinical features.
 
 ---
 
