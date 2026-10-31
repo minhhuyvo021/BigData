@@ -1,67 +1,396 @@
-🫀 Phân tích dữ liệu Heart Failure bằng PySpark
+# 🫀 Heart Failure Data Mining with PySpark
 
-Dự án này thực hiện Phần 4 của bài tập lớn môn Khai thác dữ liệu lớn, sử dụng tập dữ liệu heart_failure_clinical_records_dataset.csv được đọc từ hệ thống tệp phân tán HDFS.
+A personal **Big Data & Machine Learning project** that applies Apache PySpark to analyze clinical records of heart failure patients using data stored in **HDFS**.
 
-🎯 1. Mục tiêu Phần 4
+The project explores the dataset from three complementary perspectives:
 
-Dự án áp dụng và đánh giá 3 thuật toán tiêu biểu trong quy trình Data Mining:
+- **Classification** — predict the probability of a death event using Logistic Regression.
+- **Clustering** — identify patient groups with similar clinical characteristics using KMeans.
+- **Association Rule Mining** — discover frequent patterns and relationships using FP-Growth.
 
-⚬ Logistic Regression: Phân loại biến DEATH_EVENT (dự đoán khả năng tử vong của bệnh nhân).
-⚬ KMeans: Phân cụm bệnh nhân dựa trên các chỉ số lâm sàng để tìm ra các nhóm đặc trưng.
-⚬ FP-Growth: Khai phá tập phổ biến và luật kết hợp từ các biến đã được rời rạc hóa.
+The project also includes a trained prediction pipeline and a lightweight Tkinter application for interactive inference.
 
-⚙️ 2. Cài đặt môi trường
+---
 
-Thiết lập môi trường ảo Python và cài đặt các thư viện cần thiết:
+## ✨ Highlights
 
+- Distributed data processing with **Apache Spark / PySpark**
+- Data ingestion from **HDFS**
+- Machine Learning with **Spark MLlib**
+- Binary classification with **Logistic Regression**
+- Unsupervised learning with **KMeans**
+- Frequent pattern mining with **FP-Growth**
+- Model evaluation using multiple classification and clustering metrics
+- Reusable ML pipeline for inference
+- Simple desktop prediction interface using **Tkinter**
+
+---
+
+## 🏗️ Architecture
+
+```text
+                         ┌─────────────────────┐
+                         │        HDFS         │
+                         │  Heart Failure CSV  │
+                         └──────────┬──────────┘
+                                    │
+                                    ▼
+                         ┌─────────────────────┐
+                         │  PySpark Pipeline   │
+                         │                     │
+                         │ • Data Preparation  │
+                         │ • Feature Processing│
+                         └──────────┬──────────┘
+                                    │
+                 ┌──────────────────┼──────────────────┐
+                 │                  │                  │
+                 ▼                  ▼                  ▼
+        ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
+        │    Logistic    │ │     KMeans     │ │   FP-Growth    │
+        │   Regression   │ │   Clustering   │ │ Association    │
+        │                │ │                │ │     Rules      │
+        └───────┬────────┘ └───────┬────────┘ └───────┬────────┘
+                │                  │                  │
+                ▼                  ▼                  ▼
+        Classification      Cluster Analysis    Frequent Patterns
+             Metrics             & Profiles       & Rules
+                │                  │                  │
+                └──────────────────┼──────────────────┘
+                                   ▼
+                         ┌─────────────────────┐
+                         │  Analysis Results   │
+                         │  & Model Artifacts  │
+                         └─────────────────────┘
+```
+
+---
+
+## 📊 Dataset
+
+**Dataset:** `heart_failure_clinical_records_dataset.csv`
+
+The dataset contains clinical information from patients with heart failure.
+
+The target variable for the classification task is:
+
+```text
+DEATH_EVENT
+```
+
+where the model learns to predict whether a death event occurred during the follow-up period.
+
+The dataset is loaded from **HDFS** to demonstrate a distributed data processing workflow with Spark.
+
+---
+
+## 🧠 Methods
+
+### 1. Logistic Regression
+
+Used as a binary classification model to predict `DEATH_EVENT`.
+
+The evaluation includes:
+
+- Accuracy
+- Precision
+- Recall
+- F1-Score
+- ROC AUC
+- PR AUC
+
+Prediction outputs are stored in:
+
+```text
+outputs/classification_metrics/
+outputs/classification_predictions/
+```
+
+---
+
+### 2. KMeans
+
+KMeans is used to discover groups of patients with similar clinical characteristics.
+
+Different values of `k` are evaluated using **Silhouette Score** to select an appropriate number of clusters.
+
+The resulting clusters are further analyzed using:
+
+- Silhouette Score
+- Cluster Purity
+- Cluster size
+- Mortality rate
+- Average clinical features
+
+Outputs:
+
+```text
+outputs/kmeans_k_selection/
+outputs/kmeans_cluster_metrics/
+outputs/kmeans_cluster_profile/
+```
+
+---
+
+### 3. FP-Growth
+
+FP-Growth is applied to discover frequent patterns and association rules from discretized clinical features.
+
+The generated rules are evaluated using:
+
+- Support
+- Confidence
+- Lift
+- All-confidence
+- Kulczynski
+- Cosine
+
+Outputs:
+
+```text
+outputs/fpgrowth_itemsets/
+outputs/fpgrowth_rules/
+```
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|---|---|
+| Language | Python |
+| Big Data | Apache Spark / PySpark |
+| Distributed Storage | HDFS |
+| Machine Learning | Spark MLlib |
+| Classification | Logistic Regression |
+| Clustering | KMeans |
+| Pattern Mining | FP-Growth |
+| GUI | Tkinter |
+| Version Control | Git / GitHub |
+| Runtime | Java |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+Make sure the following are installed:
+
+- Python 3
+- Java
+- Apache Spark
+- Hadoop / HDFS
+- Git
+
+Verify Java:
+
+```bash
+java -version
+```
+
+Verify Python:
+
+```bash
+python3 --version
+```
+
+---
+
+### 1. Clone the repository
+
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd <YOUR_PROJECT_FOLDER>
+```
+
+### 2. Create a virtual environment
+
+```bash
 python3 -m venv .venv
 source .venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
+---
 
-⚠️ Lưu ý quan trọng:
-PySpark yêu cầu máy tính phải cài đặt sẵn Java. Kiểm tra phiên bản Java hiện tại trên máy của bạn bằng lệnh:
+## ▶️ Run the Data Mining Pipeline
 
-java -version
+Run the main PySpark pipeline:
 
+```bash
+python src/heart_failure_pyspark.py \
+  --input <YOUR_HDFS_PATH>/heart_failure_clinical_records_dataset.csv \
+  --output outputs
+```
 
-🚀 3. Chạy phân tích
+Example:
 
-Chạy script chính để thực hiện quá trình phân tích.
+```bash
+python src/heart_failure_pyspark.py \
+  --input hdfs://localhost:9000/data/heart_failure_clinical_records_dataset.csv \
+  --output outputs
+```
 
-Đảm bảo bạn đã thay thế <YOUR_HDFS_PATH> bằng đường dẫn thực tế chứa dữ liệu trên hệ thống HDFS của bạn:
+After execution, the analysis results will be available under:
 
-python src/heart_failure_pyspark.py --input <YOUR_HDFS_PATH>/heart_failure_clinical_records_dataset.csv --output outputs
+```text
+outputs/
+```
 
+The summary report can be found at:
 
-📂 4. Kết quả sinh ra
+```text
+outputs/comparison_summary.md
+```
 
-Sau khi quá trình chạy hoàn tất, toàn bộ kết quả sẽ được xuất ra thư mục outputs/, bao gồm:
+---
 
-⚬ 📁 classification_metrics/: Các chỉ số đánh giá mô hình phân loại (Accuracy, Precision, Recall, F1, ROC AUC, PR AUC).
-⚬ 📁 classification_predictions/: Tập mẫu dự đoán của thuật toán Logistic Regression.
-⚬ 📁 kmeans_k_selection/: Bảng điểm Silhouette để đánh giá và lựa chọn giá trị k tối ưu.
-⚬ 📁 kmeans_cluster_metrics/: Độ thuần nhất (Purity) và điểm Silhouette của mô hình KMeans tốt nhất.
-⚬ 📁 kmeans_cluster_profile/: Mô tả chi tiết từng cụm (số lượng bệnh nhân, tỷ lệ tử vong, các giá trị trung bình của từng chỉ số).
-⚬ 📁 fpgrowth_itemsets/: Top các tập phổ biến được khai phá.
-⚬ 📁 fpgrowth_rules/: Top các luật kết hợp kèm theo các chỉ số tin cậy (Lift, All-confidence, Kulczynski và Cosine).
-⚬ 📄 comparison_summary.md: File tóm tắt so sánh 3 phương pháp, phục vụ trực tiếp cho việc viết báo cáo.
+## 🤖 Train the Prediction Model
 
-💻 5. Huấn luyện mô hình và Ứng dụng dự đoán
+A dedicated training script is provided to create a reusable Logistic Regression pipeline.
 
-Để xây dựng một ứng dụng thực tế từ kết quả phân tích, bạn có thể huấn luyện một mô hình Logistic Regression riêng và lưu vào thư mục models/:
-
+```bash
 python src/train_heart_failure_model.py
+```
 
+Or specify the input and model output paths explicitly:
 
-Nếu cần truyền rõ đường dẫn HDFS cụ thể, hãy chạy:
-
+```bash
 python src/train_heart_failure_model.py \
   --input <YOUR_HDFS_PATH>/heart_failure_clinical_records_dataset.csv \
   --model-output models/logistic_regression_pipeline
+```
 
+The trained pipeline is saved to:
 
-Mở giao diện người dùng (GUI):
-Sau khi có mô hình, bạn có thể mở giao diện Tkinter để người dùng nhập các chỉ số sức khỏe thực tế và xem kết quả dự đoán trực tiếp:
+```text
+models/logistic_regression_pipeline/
+```
 
+---
+
+## 🖥️ Run the Prediction Application
+
+After training the model, launch the Tkinter application:
+
+```bash
 python src/predict_heart_failure_tkinter.py
+```
+
+The application allows users to enter patient clinical features and obtain a prediction from the trained Logistic Regression pipeline.
+
+```text
+Patient Features
+       │
+       ▼
+   Tkinter GUI
+       │
+       ▼
+Trained ML Pipeline
+       │
+       ▼
+ Prediction
+```
+
+> **Note:** This application is intended for demonstration and educational purposes only.
+
+---
+
+## 📂 Project Structure
+
+```text
+.
+├── src/
+│   ├── heart_failure_pyspark.py
+│   ├── train_heart_failure_model.py
+│   └── predict_heart_failure_tkinter.py
+│
+├── models/
+│   └── logistic_regression_pipeline/
+│
+├── outputs/
+│   ├── classification_metrics/
+│   ├── classification_predictions/
+│   ├── kmeans_k_selection/
+│   ├── kmeans_cluster_metrics/
+│   ├── kmeans_cluster_profile/
+│   ├── fpgrowth_itemsets/
+│   ├── fpgrowth_rules/
+│   └── comparison_summary.md
+│
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 📈 Outputs
+
+The pipeline generates the following artifacts:
+
+| Output | Description |
+|---|---|
+| `classification_metrics/` | Classification evaluation metrics |
+| `classification_predictions/` | Logistic Regression predictions |
+| `kmeans_k_selection/` | Silhouette scores for candidate `k` values |
+| `kmeans_cluster_metrics/` | Metrics for the selected clustering model |
+| `kmeans_cluster_profile/` | Statistical profile of each cluster |
+| `fpgrowth_itemsets/` | Frequent itemsets |
+| `fpgrowth_rules/` | Association rules and rule metrics |
+| `comparison_summary.md` | Summary comparing the three approaches |
+
+---
+
+## 🔍 Key Questions
+
+This project is designed to explore three main questions:
+
+**1. Classification**
+
+> Can clinical features be used to predict whether a patient experiences a death event?
+
+**2. Clustering**
+
+> Can patients be grouped into meaningful clusters based on their clinical characteristics?
+
+**3. Association Rules**
+
+> Which clinical conditions or characteristics frequently occur together?
+
+---
+
+## 🎯 Learning Objectives
+
+Through this project, I explored:
+
+- Distributed data processing with PySpark
+- Working with data stored in HDFS
+- Feature preparation for Machine Learning
+- Supervised learning with Logistic Regression
+- Unsupervised learning with KMeans
+- Frequent pattern mining with FP-Growth
+- Model evaluation and comparison
+- Building a reusable ML pipeline
+- Integrating a trained model into a desktop application
+
+---
+
+## 👨‍💻 About
+
+**Võ Minh Huy**
+
+Personal project focused on:
+
+`Big Data` · `Data Mining` · `PySpark` · `Machine Learning`
+
+---
+
+## ⚠️ Disclaimer
+
+This project is intended for **educational and experimental purposes**. Model predictions should not be interpreted as medical advice or used for clinical decision-making.
